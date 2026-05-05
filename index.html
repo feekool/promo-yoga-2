@@ -3,1043 +3,898 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="theme-color" content="#5d7a6f">
+    <meta name="theme-color" content="#6b8e7a">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Feekool Yoga Demo — Пример йога-форума</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Feekool Yoga — Платформа для обучения йоге на GitHub | Курсы, ученики, сообщество</title>
+    <meta name="description" content="Создайте платформу для обучения йоге за 1 минуту: онлайн-курсы, расписание, витрина практик, общение с учениками — без серверов и сложной настройки">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
         body {
             font-family: 'Inter', sans-serif;
-            background: #f8faf9;
-            color: #1a2a26;
-            line-height: 1.5;
+            background: #f9fbfa;
+            color: #1a2a24;
+            line-height: 1.6;
+            scroll-behavior: smooth;
             font-size: clamp(14px, 1.8vw, 16px);
+            overflow-x: hidden;
         }
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 24px); }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 clamp(16px, 4vw, 24px);
+        }
         
-        /* Header */
-        .demo-header {
-            background: linear-gradient(135deg, #5d7a6f, #4a6b5f);
-            color: white;
-            padding: clamp(16px, 3vw, 24px) 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-        }
-        .demo-header-inner {
+        /* Header & nav */
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            padding: clamp(12px, 3vw, 20px) 0;
+            border-bottom: 1px solid #e0e9e4;
+            gap: clamp(12px, 3vw, 16px);
+            top: 0;
+            background: rgba(249, 251, 250, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            position: sticky;
         }
-        .demo-logo {
+        .logo-area {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: clamp(1.2rem, 3.5vw, 1.4rem);
+            gap: clamp(10px, 2.5vw, 14px);
+            min-width: 0;
         }
-        .demo-logo-icon {
-            font-size: clamp(1.5rem, 4vw, 2rem);
-        }
-        .demo-nav {
+        .cat-icon {
+            width: clamp(40px, 8vw, 48px);
+            height: clamp(40px, 8vw, 48px);
+            background: linear-gradient(135deg, #6b8e7a, #5a7a68);
+            border-radius: 50%;
             display: flex;
-            gap: clamp(8px, 2vw, 16px);
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: clamp(20px, 5vw, 28px);
+            box-shadow: 0 2px 8px rgba(107, 142, 122, 0.25);
+            flex-shrink: 0;
+        }
+        .brand h1 {
+            font-size: clamp(1.4rem, 4vw, 1.7rem);
+            font-weight: 800;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #3a5a4a, #6b8e7a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+        .brand p {
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            color: #5a6f65;
+        }
+        .btn-group {
+            display: flex;
+            gap: clamp(10px, 2.5vw, 14px);
             flex-wrap: wrap;
+            justify-content: flex-end;
+            flex: 1;
+            min-width: 0;
         }
-        .demo-nav a {
-            color: white;
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(10px, 2.5vw, 12px) clamp(16px, 4vw, 24px);
+            border-radius: 40px;
+            font-weight: 600;
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: clamp(0.85rem, 2.5vw, 0.95rem);
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+            font-size: clamp(0.9rem, 2.8vw, 1rem);
+            text-align: center;
+            min-height: 44px;
+            min-width: 44px;
+            white-space: nowrap;
+            cursor: pointer;
+            border: none;
+            gap: 6px;
         }
-        .demo-nav a:hover, .demo-nav a.active {
-            background: rgba(255,255,255,0.15);
-        }
-        .demo-back {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
+        .btn-primary {
+            background: linear-gradient(135deg, #6b8e7a, #5a7a68);
             color: white;
-            text-decoration: none;
-            font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+            box-shadow: 0 4px 12px rgba(107, 142, 122, 0.3);
+        }
+        .btn-primary:hover, .btn-primary:active {
+            background: linear-gradient(135deg, #5a7a68, #4a6a58);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(90, 122, 104, 0.35);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #c8d5ce;
+            color: #2a4a3e;
+        }
+        .btn-outline:hover, .btn-outline:active {
+            background: #e8f0eb;
+            border-color: #6b8e7a;
+            transform: translateY(-1px);
+        }
+        .btn-large {
+            padding: clamp(12px, 3vw, 14px) clamp(24px, 6vw, 36px);
+            font-size: clamp(0.95rem, 3vw, 1.05rem);
+        }
+        .btn-full-mobile {
+            width: 100%;
+            max-width: 320px;
+        }
+        
+        /* Hero */
+        .hero {
+            padding: clamp(40px, 8vw, 60px) 0 clamp(30px, 6vw, 40px);
+            text-align: center;
+        }
+        .hero h2 {
+            font-size: clamp(1.8rem, 6vw, 2.6rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(145deg, #3a5a4a, #6b8e7a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: clamp(16px, 4vw, 20px);
+            line-height: 1.2;
+        }
+        .hero .highlight {
+            background: #e8f4ec;
+            color: #2a5a42;
+            padding: clamp(4px, 1.5vw, 6px) clamp(12px, 3vw, 16px);
+            border-radius: 60px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            transition: background 0.2s;
-        }
-        .demo-back:hover { background: rgba(255,255,255,0.3); }
-        
-        /* Forum Layout */
-        .forum-layout {
-            display: grid;
-            grid-template-columns: 240px 1fr;
-            gap: clamp(20px, 4vw, 32px);
-            padding: clamp(24px, 5vw, 40px) 0;
-        }
-        
-        /* Sidebar */
-        .forum-sidebar {
-            background: white;
-            border-radius: clamp(16px, 3vw, 24px);
-            padding: clamp(16px, 3vw, 24px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-            height: fit-content;
-            position: sticky;
-            top: 100px;
-        }
-        .sidebar-section { margin-bottom: clamp(20px, 4vw, 28px); }
-        .sidebar-title {
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            font-weight: 700;
-            color: #2a4a42;
-            margin-bottom: clamp(12px, 2.5vw, 16px);
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e8f0ed;
-        }
-        .category-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-        .category-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-            font-size: clamp(0.9rem, 2.5vw, 0.95rem);
-        }
-        .category-item:hover, .category-item.active {
-            background: #e8f0ed;
-            color: #2a5a4a;
+            font-size: clamp(0.9rem, 2.8vw, 1rem);
             font-weight: 500;
-        }
-        .category-icon { font-size: 1.2rem; }
-        
-        .new-topic-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #5d7a6f, #4a6b5f);
-            color: white;
-            border: none;
-            padding: clamp(12px, 3vw, 14px);
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
+            margin-bottom: clamp(16px, 4vw, 24px);
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 8px;
-            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .new-topic-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(93, 122, 111, 0.3);
-        }
-        
-        /* Main Content */
-        .forum-main { display: flex; flex-direction: column; gap: clamp(20px, 4vw, 28px); }
-        
-        /* Search & Filters */
-        .forum-controls {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .search-box {
-            flex: 1;
-            min-width: 200px;
-            position: relative;
-        }
-        .search-box input {
-            width: 100%;
-            padding: 12px 16px 12px 40px;
-            border-radius: 40px;
-            border: 2px solid #c8d5d0;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            background: white;
-            transition: border-color 0.2s;
-        }
-        .search-box input:focus {
-            outline: none;
-            border-color: #5d7a6f;
-            box-shadow: 0 0 0 3px rgba(93, 122, 111, 0.1);
-        }
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #5a6f67;
-        }
-        .filter-select {
-            padding: 12px 16px;
-            border-radius: 40px;
-            border: 2px solid #c8d5d0;
-            background: white;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            cursor: pointer;
-        }
-        
-        /* Thread List */
-        .thread-list { display: flex; flex-direction: column; gap: 16px; }
-        .thread-card {
-            background: white;
-            border-radius: clamp(16px, 3vw, 24px);
-            padding: clamp(16px, 3vw, 24px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-            border: 1px solid #e0ebe8;
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
-        .thread-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(93, 122, 111, 0.12);
-            border-color: #a8c4b8;
-        }
-        .thread-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-        .thread-title {
-            font-size: clamp(1.1rem, 3.5vw, 1.3rem);
-            font-weight: 700;
-            color: #1a2a26;
-            line-height: 1.3;
-        }
-        .thread-title a { color: inherit; text-decoration: none; }
-        .thread-title a:hover { color: #2a5a4a; }
-        .thread-meta {
-            display: flex;
-            gap: 16px;
-            font-size: clamp(0.8rem, 2.2vw, 0.9rem);
-            color: #5a6f67;
-            flex-wrap: wrap;
-        }
-        .thread-meta span { display: flex; align-items: center; gap: 4px; }
-        .thread-tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-        .thread-tag {
-            background: #e8f0ed;
-            color: #2a5a4a;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: clamp(0.75rem, 2vw, 0.85rem);
-            font-weight: 500;
-        }
-        .thread-preview {
-            color: #3a5a52;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        .hero p {
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
+            color: #2a4a3e;
+            max-width: 800px;
+            margin: 0 auto clamp(20px, 5vw, 24px);
             line-height: 1.5;
-            margin-bottom: 12px;
         }
-        .thread-footer {
+        .hero-buttons {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 12px;
-            border-top: 1px solid #e8f0ed;
             flex-wrap: wrap;
-            gap: 12px;
-        }
-        .thread-author {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .author-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #a8c4b8, #8fb3a3);
-            display: flex;
-            align-items: center;
+            gap: clamp(10px, 2.5vw, 14px);
             justify-content: center;
-            color: white;
+            margin-top: clamp(16px, 4vw, 24px);
+        }
+        .badge-speed {
+            background: #e0f0e6;
+            color: #2a6a4a;
+            border-radius: 30px;
+            padding: clamp(6px, 2vw, 8px) clamp(14px, 3.5vw, 18px);
             font-weight: 600;
-            font-size: 0.9rem;
-        }
-        .author-name {
-            font-weight: 600;
-            font-size: clamp(0.85rem, 2.5vw, 0.95rem);
-        }
-        .thread-stats {
-            display: flex;
-            gap: 16px;
-            font-size: clamp(0.8rem, 2.2vw, 0.9rem);
-            color: #5a6f67;
-        }
-        .thread-stats span { display: flex; align-items: center; gap: 4px; }
-        
-        /* Pinned Thread */
-        .thread-card.pinned {
-            border-left: 4px solid #5d7a6f;
-            background: linear-gradient(135deg, #f8faf9, #f0f7f4);
-        }
-        .pinned-badge {
-            background: #5d7a6f;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: clamp(0.7rem, 2vw, 0.8rem);
-            font-weight: 600;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
+            margin: clamp(16px, 4vw, 24px) auto 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 100%;
         }
         
-        /* Thread Detail View (hidden by default) */
-        .thread-detail {
-            display: none;
-            background: white;
-            border-radius: clamp(16px, 3vw, 24px);
-            padding: clamp(20px, 4vw, 32px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+        /* Sections */
+        .section {
+            padding: clamp(40px, 8vw, 60px) 0;
+            border-bottom: 1px solid #e8f0eb;
         }
-        .thread-detail.active { display: block; }
-        .thread-list.hidden { display: none; }
-        
-        .detail-header {
-            margin-bottom: clamp(20px, 4vw, 28px);
-            padding-bottom: clamp(16px, 3vw, 20px);
-            border-bottom: 1px solid #e8f0ed;
-        }
-        .detail-title {
-            font-size: clamp(1.3rem, 4vw, 1.6rem);
+        .section-title {
+            font-size: clamp(1.5rem, 5vw, 2rem);
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: clamp(24px, 6vw, 40px);
+            text-align: center;
+            letter-spacing: -0.3px;
             line-height: 1.3;
         }
-        .detail-meta {
+        
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+            gap: clamp(20px, 4vw, 32px);
+        }
+        .card {
+            background: white;
+            border-radius: clamp(20px, 4vw, 28px);
+            padding: clamp(20px, 4vw, 28px) clamp(16px, 3vw, 20px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #e0ebe6;
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            gap: clamp(8px, 2vw, 12px);
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: #a8c4b4;
+            box-shadow: 0 20px 30px -12px rgba(107, 142, 122, 0.15);
+        }
+        .card-icon {
+            font-size: clamp(2rem, 6vw, 2.5rem);
+            line-height: 1;
+        }
+        .card h3 {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .card p {
+            color: #3a5a4e;
+            font-size: clamp(0.9rem, 2.8vw, 1rem);
+            line-height: 1.5;
+        }
+        .card .btn {
+            margin-top: auto;
+            align-self: flex-start;
+        }
+        
+        /* Steps */
+        .steps {
+            background: #f0f7f2;
+            border-radius: clamp(32px, 6vw, 48px);
+            padding: clamp(24px, 5vw, 40px) clamp(20px, 4vw, 36px);
+            margin-top: clamp(16px, 4vw, 20px);
+        }
+        .step-list {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(20px, 4vw, 28px);
+            counter-reset: step-counter;
+        }
+        .step-item {
+            display: flex;
+            gap: clamp(14px, 3vw, 20px);
+            align-items: flex-start;
+            counter-increment: step-counter;
+        }
+        .step-number {
+            background: linear-gradient(135deg, #6b8e7a, #5a7a68);
+            color: white;
+            width: clamp(40px, 8vw, 44px);
+            height: clamp(40px, 8vw, 44px);
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: clamp(1.1rem, 3.5vw, 1.3rem);
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(107, 142, 122, 0.2);
+        }
+        .step-text {
+            font-size: clamp(0.9rem, 2.8vw, 1rem);
+            line-height: 1.5;
+        }
+        .step-text strong {
+            font-size: clamp(1rem, 3vw, 1.1rem);
+            display: block;
+            margin-bottom: clamp(4px, 1vw, 6px);
+            font-weight: 700;
+        }
+        .step-text a {
+            color: #2a5a42;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .step-text a:hover { text-decoration: underline; }
+        
+        .alt-install {
+            background: #e8f4ec;
+            border-radius: clamp(16px, 4vw, 24px);
+            padding: clamp(14px, 3vw, 20px);
+            text-align: center;
+            margin-top: clamp(24px, 5vw, 32px);
+            font-size: clamp(0.9rem, 2.8vw, 1rem);
+        }
+        .steps-cta {
+            text-align: center;
+            margin-top: clamp(24px, 5vw, 28px);
+        }
+        
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+            gap: clamp(14px, 3vw, 20px);
+            justify-content: center;
+            margin-top: clamp(20px, 4vw, 30px);
+        }
+        .gallery-item {
+            background: #e8f0eb;
+            border-radius: clamp(20px, 4vw, 28px);
+            padding: clamp(10px, 2.5vw, 12px);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #d0e0d8;
+        }
+        .gallery-img {
+            width: 100%;
+            aspect-ratio: 220/160;
+            background: linear-gradient(135deg, #a8c4b4, #8fb3a0);
+            border-radius: clamp(14px, 3vw, 20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-shadow: 0 0 6px rgba(0,0,0,0.3);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .gallery-url {
+            margin-top: clamp(8px, 2vw, 12px);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(6px, 1.5vw, 8px);
+        }
+        .gallery-url input {
+            width: 100%;
+            padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 14px);
+            border-radius: 40px;
+            border: 1px solid #c8d5ce;
+            font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+            min-height: 40px;
+        }
+        .gallery-url input:focus {
+            outline: none;
+            border-color: #6b8e7a;
+            box-shadow: 0 0 0 3px rgba(107, 142, 122, 0.1);
+        }
+        .gallery-url button {
+            background: #6b8e7a;
+            border: none;
+            color: white;
+            padding: clamp(8px, 2vw, 10px) clamp(16px, 4vw, 20px);
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            font-weight: 600;
+            min-height: 40px;
+            transition: background 0.2s;
+        }
+        .gallery-url button:hover { background: #5a7a68; }
+        
+        /* CTA Block */
+        .cta-block {
+            text-align: center;
+            background: linear-gradient(115deg, #e8f4ec, #ffffff);
+            border-radius: clamp(32px, 6vw, 48px);
+            padding: clamp(32px, 7vw, 48px) clamp(20px, 4vw, 24px);
+            margin-bottom: clamp(16px, 4vw, 20px);
+        }
+        .offer-badge {
+            background: linear-gradient(135deg, #6b8e7a, #5a7a68);
+            color: white;
+            border-radius: 60px;
+            padding: clamp(8px, 2vw, 10px) clamp(16px, 4vw, 24px);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: clamp(16px, 4vw, 20px);
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2.8vw, 1rem);
             flex-wrap: wrap;
-            color: #5a6f67;
+            justify-content: center;
+        }
+        .cta-block h3 {
+            font-size: clamp(1.4rem, 4.5vw, 1.9rem);
+            margin-bottom: clamp(12px, 3vw, 16px);
+            line-height: 1.3;
+        }
+        .cta-block p {
+            max-width: 700px;
+            margin: 0 auto clamp(20px, 5vw, 28px);
+            font-size: clamp(0.95rem, 3vw, 1.05rem);
+            line-height: 1.5;
+        }
+        .cta-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(10px, 2.5vw, 14px);
+            justify-content: center;
+            margin: clamp(16px, 4vw, 20px) 0;
+        }
+        .cta-note {
+            background: #fff8e8;
+            border-radius: 60px;
+            padding: clamp(12px, 3vw, 16px) clamp(20px, 4vw, 24px);
+            max-width: 560px;
+            margin: clamp(24px, 5vw, 32px) auto 0;
+            font-size: clamp(0.9rem, 2.8vw, 1rem);
+            line-height: 1.4;
+        }
+        
+        /* Footer */
+        footer {
+            padding: clamp(32px, 7vw, 40px) 0;
+            text-align: center;
+            color: #4a5f55;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+            line-height: 1.6;
+        }
+        footer a {
+            color: #2a5a42;
+            text-decoration: none;
+        }
+        footer a:hover { text-decoration: underline; }
+        
+        /* Floating mobile CTA */
+        .mobile-cta {
+            display: none;
+            position: fixed;
+            bottom: clamp(12px, 3vw, 20px);
+            left: clamp(12px, 3vw, 20px);
+            right: clamp(12px, 3vw, 20px);
+            z-index: 999;
+            padding: clamp(8px, 2vw, 12px);
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(107, 142, 122, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .mobile-cta .btn {
+            width: 100%;
+            padding: clamp(12px, 3vw, 14px);
+            font-size: clamp(0.95rem, 3vw, 1rem);
+        }
+        
+        /* Quick access bar */
+        .quick-access {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(8px, 2vw, 12px);
+            justify-content: center;
+            margin: clamp(20px, 5vw, 40px) 0;
+            padding: clamp(12px, 3vw, 16px);
+            background: #f0f7f2;
+            border-radius: clamp(16px, 4vw, 24px);
+            border: 1px solid #d0e0d8;
+        }
+        .quick-access .btn {
+            padding: clamp(8px, 2vw, 10px) clamp(14px, 3vw, 18px);
             font-size: clamp(0.85rem, 2.5vw, 0.95rem);
         }
-        .detail-content {
-            font-size: clamp(0.95rem, 2.8vw, 1.05rem);
-            line-height: 1.7;
-            color: #2a4a42;
-            margin-bottom: clamp(24px, 5vw, 32px);
-        }
-        .detail-content p { margin-bottom: 16px; }
-        .detail-content img {
-            max-width: 100%;
-            border-radius: 12px;
-            margin: 16px 0;
-        }
         
-        /* Comments Section */
-        .comments-section {
-            border-top: 1px solid #e8f0ed;
-            padding-top: clamp(20px, 4vw, 28px);
-        }
-        .comments-title {
-            font-size: clamp(1.1rem, 3.5vw, 1.3rem);
-            font-weight: 700;
-            margin-bottom: clamp(16px, 3vw, 20px);
-        }
-        .comment-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
-        .comment-card {
-            display: flex;
-            gap: 12px;
-            padding: clamp(12px, 3vw, 16px);
-            background: #f8faf9;
-            border-radius: 16px;
-        }
-        .comment-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #a8c4b8, #8fb3a3);
-            display: flex;
+        /* Yoga-specific accents */
+        .yoga-badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            flex-shrink: 0;
+            gap: 6px;
+            background: #e8f4ec;
+            color: #2a5a42;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+            font-weight: 500;
         }
-        .comment-content { flex: 1; }
-        .comment-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .comment-author { font-weight: 600; font-size: clamp(0.9rem, 2.5vw, 0.95rem); }
-        .comment-time { color: #5a6f67; font-size: clamp(0.8rem, 2.2vw, 0.9rem); }
-        .comment-text {
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            line-height: 1.5;
-            color: #2a4a42;
-        }
-        
-        /* Comment Form */
-        .comment-form {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-        .comment-form-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #5d7a6f, #4a6b5f);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-        .comment-form-input {
-            flex: 1;
-            padding: 12px 16px;
-            border-radius: 16px;
-            border: 2px solid #c8d5d0;
-            font-size: clamp(0.9rem, 2.5vw, 1rem);
-            resize: vertical;
-            min-height: 50px;
-            max-height: 200px;
-            font-family: inherit;
-        }
-        .comment-form-input:focus {
-            outline: none;
-            border-color: #5d7a6f;
-        }
-        .comment-form-btn {
-            background: linear-gradient(135deg, #5d7a6f, #4a6b5f);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-            white-space: nowrap;
-        }
-        .comment-form-btn:hover { transform: translateY(-2px); }
         
         /* Responsive */
-        @media (max-width: 900px) {
-            .forum-layout { grid-template-columns: 1fr; }
-            .forum-sidebar {
-                position: static;
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-                gap: 16px;
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
             }
-            .sidebar-section { margin-bottom: 0; }
+            .logo-area { justify-content: center; }
+            .btn-group { justify-content: center; flex: none; }
+            .hero-buttons .btn { flex: 1; min-width: 140px; }
+            .step-item { flex-direction: column; align-items: center; text-align: center; }
+            .step-number { margin-bottom: 8px; }
+            .cta-buttons .btn { flex: 1; min-width: 160px; max-width: 280px; }
         }
-        @media (max-width: 600px) {
-            .demo-header-inner { flex-direction: column; align-items: stretch; }
-            .demo-nav { justify-content: center; }
-            .forum-controls { flex-direction: column; align-items: stretch; }
-            .search-box { min-width: 100%; }
-            .thread-header { flex-direction: column; align-items: flex-start; }
-            .thread-footer { flex-direction: column; align-items: flex-start; }
-            .comment-form { flex-direction: column; }
-            .comment-form-btn { width: 100%; }
+        @media (max-width: 480px) {
+            .btn-group { width: 100%; }
+            .btn-group .btn { flex: 1; min-width: 0; font-size: 0.9rem; padding: 10px 16px; }
+            .hero h2 { font-size: 1.7rem; }
+            .section-title { font-size: 1.4rem; }
+            .card { padding: 20px 16px; }
+            .gallery { grid-template-columns: 1fr; }
+            .quick-access { flex-direction: column; }
+            .quick-access .btn { width: 100%; }
+        }
+        @media (max-width: 360px) {
+            .hero h2 { font-size: 1.5rem; }
+            .brand h1 { font-size: 1.3rem; }
+            .btn-large { padding: 10px 20px; font-size: 0.9rem; }
+        }
+        @media (max-width: 768px) {
+            .mobile-cta { display: block; }
+            .desktop-only { display: none; }
+        }
+        @media (min-width: 769px) {
+            .mobile-only { display: none; }
         }
         
-        /* Utility */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: clamp(0.75rem, 2vw, 0.85rem);
-            font-weight: 500;
+        /* Accessibility */
+        .btn:focus, input:focus, a:focus {
+            outline: 2px solid #2a5a42;
+            outline-offset: 2px;
         }
-        .badge-new { background: #e0f0e8; color: #2a6a4a; }
-        .badge-hot { background: #fff0e0; color: #a85a2a; }
-        .badge-solved { background: #e8f0ff; color: #2a4a8a; }
         
-        .back-to-home {
-            text-align: center;
-            padding: clamp(20px, 4vw, 32px) 0;
-            border-top: 1px solid #e8f0ed;
-            margin-top: clamp(20px, 4vw, 32px);
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
-        .back-to-home a {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #2a5a4a;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 10px 20px;
-            border-radius: 40px;
-            transition: background 0.2s;
-        }
-        .back-to-home a:hover { background: #e8f0ed; }
     </style>
 </head>
 <body>
 
-<!-- Header -->
-<header class="demo-header">
-    <div class="container demo-header-inner">
-        <a href="index.html" class="demo-back">← На главную</a>
-        <div class="demo-logo">
-            <span class="demo-logo-icon">🧘‍♀️</span>
-            <span>Feekool Yoga Demo</span>
-        </div>
-        <nav class="demo-nav">
-            <a href="#" class="active">Форум</a>
-            <a href="#">Курсы</a>
-            <a href="#">Расписание</a>
-            <a href="#">Профиль</a>
-        </nav>
-    </div>
-</header>
-
 <div class="container">
-    <div class="forum-layout">
-        <!-- Sidebar -->
-        <aside class="forum-sidebar">
-            <div class="sidebar-section">
-                <div class="sidebar-title">📚 Категории</div>
-                <ul class="category-list">
-                    <li class="category-item active"><span class="category-icon">🏠</span> Все темы</li>
-                    <li class="category-item"><span class="category-icon">🧘‍♀️</span> Хатха-йога</li>
-                    <li class="category-item"><span class="category-icon">🌊</span> Виньяса-флоу</li>
-                    <li class="category-item"><span class="category-icon">🕉️</span> Медитация</li>
-                    <li class="category-item"><span class="category-icon">🌿</span> Аюрведа</li>
-                    <li class="category-item"><span class="category-icon">📅</span> Расписание</li>
-                    <li class="category-item"><span class="category-icon">🛍️</span> Витрина</li>
-                    <li class="category-item"><span class="category-icon">❓</span> Вопросы</li>
-                </ul>
+    <!-- Header -->
+    <nav class="navbar" aria-label="Основная навигация">
+        <div class="logo-area">
+            <div class="cat-icon" aria-hidden="true">🧘</div>
+            <div class="brand">
+                <h1>Feekool Yoga</h1>
+                <p>платформа для обучения йоге</p>
+            </div>
+        </div>
+        <div class="btn-group">
+            <a href="https://feekool.github.io" target="_blank" class="btn btn-outline" aria-label="Открыть демо">🇷🇺 Демо</a>
+            <a href="#contact" class="btn btn-primary">✉️ Связаться</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+        <div class="highlight">🎓 Запустите школу йоги онлайн</div>
+        <h2 id="hero-title">Ваша платформа для обучения йоге<br>за 1 минуту на GitHub</h2>
+        <p>Без серверов, бэкенда и сложной настройки. Создайте пространство для курсов, расписания, витрины практик и общения с учениками — под вашим полным контролем.</p>
+        
+        <div class="hero-buttons">
+            <a href="https://feekool.github.io" target="_blank" class="btn btn-primary btn-large btn-full-mobile" aria-label="Посмотреть демо-платформу для йога-школы">
+                👁️ Смотреть демо
+            </a>
+            <a href="https://github.com/feekool/feekool.github.io" target="_blank" class="btn btn-outline btn-large btn-full-mobile" aria-label="Перейти к шаблону на GitHub">
+                📦 Шаблон
+            </a>
+        </div>
+        
+        <div class="badge-speed">
+            ⏱️ 1 минута • 🆓 Бесплатно • ♾️ Обновления • 🧘 Для йоги
+        </div>
+    </section>
+
+    <!-- Quick access -->
+    <div class="quick-access" role="navigation" aria-label="Быстрые ссылки">
+        <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">🔗 Демо-платформа</a>
+        <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">📱 Мобильная версия</a>
+        <a href="https://github.com/feekool/feekool.github.io" target="_blank" class="btn btn-outline">🐙 GitHub шаблон</a>
+        <a href="#install" class="btn btn-outline">📚 Инструкция</a>
+    </div>
+
+    <!-- Преимущества -->
+    <section class="section" aria-labelledby="features-title">
+        <h2 id="features-title" class="section-title">✨ Почему Feekool для йога-школ?</h2>
+        <div class="cards-grid">
+            <article class="card">
+                <div class="card-icon" aria-hidden="true">🚀</div>
+                <h3>Запуск за минуту</h3>
+                <p>Никаких серверов и баз данных. GitHub Pages хостит ваш форум — вы фокусируетесь на преподавании, а не на технике.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">👉 Попробовать демо</a>
+            </article>
+            <article class="card">
+                <div class="card-icon" aria-hidden="true">🎨</div>
+                <h3>Дизайн под вашу школу</h3>
+                <p>Адаптируйте под хатха-йогу, виньясу, кундалини, аюрведу или авторский метод. Цвета, шрифты, структура — всё настраивается.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">👁️ Примеры оформления</a>
+            </article>
+            <article class="card">
+                <div class="card-icon" aria-hidden="true">🔒</div>
+                <h3>Контроль над сообществом</h3>
+                <p>Замените чаты в мессенджерах. Вы управляете доступом, модерацией, расписанием и атмосферой обучения.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">🔐 Демо с настройками</a>
+            </article>
+            <article class="card">
+                <div class="card-icon" aria-hidden="true">🔄</div>
+                <h3>Обновления без усилий</h3>
+                <p>Open Source версия получает все улучшения автоматически. Ваша платформа растёт вместе с вашей школой.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">🔄 Как это работает</a>
+            </article>
+        </div>
+    </section>
+
+    <!-- Установка (БЕЗ ИЗМЕНЕНИЙ — техническая часть) -->
+    <section class="section" id="install" aria-labelledby="install-title">
+        <h2 id="install-title" class="section-title">📦 Установка за 1 минуту</h2>
+        <div class="steps">
+            <ol class="step-list">
+                <li class="step-item">
+                    <div class="step-number" aria-hidden="true">1</div>
+                    <div class="step-text">
+                        <strong>Зарегистрируйтесь на GitHub</strong>
+                        Создайте бесплатный аккаунт на <a href="https://github.com" target="_blank">github.com</a>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-number" aria-hidden="true">2</div>
+                    <div class="step-text">
+                        <strong>Откройте шаблон</strong><br>
+                        <a href="https://github.com/feekool/feekool.github.io" target="_blank">github.com/feekool/feekool.github.io</a>
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-number" aria-hidden="true">3</div>
+                    <div class="step-text">
+                        <strong>Нажмите "Use this template"</strong> → "Create a new repository". Назовите его, например, "yoga-school"
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-number" aria-hidden="true">4</div>
+                    <div class="step-text">
+                        <strong>Включите GitHub Pages</strong>: Settings → Pages → ветка main → Save. Через минуту платформа онлайн!
+                    </div>
+                </li>
+                <li class="step-item">
+                    <div class="step-number" aria-hidden="true">5</div>
+                    <div class="step-text">
+                        <strong>Готово! 🧘‍♀️</strong> Ваша платформа работает. Добавляйте курсы, расписание, материалы — всё под вашим контролем.
+                    </div>
+                </li>
+            </ol>
+            
+            <div class="alt-install">
+                💡 <strong>Альтернатива:</strong> Скачайте архив и установите на любой хостинг со статическим HTML. Но GitHub Pages — самый простой и бесплатный путь.
             </div>
             
-            <div class="sidebar-section">
-                <div class="sidebar-title">🔥 Популярное</div>
-                <ul class="category-list">
-                    <li class="category-item"><span class="category-icon">⭐</span> Топ недели</li>
-                    <li class="category-item"><span class="category-icon">💬</span> Обсуждаемое</li>
-                    <li class="category-item"><span class="category-icon">✅</span> Решённое</li>
-                </ul>
-            </div>
-            
-            <button class="new-topic-btn" onclick="alert('💡 В реальной версии: форма создания новой темы')">
-                ✨ Новая тема
-            </button>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="forum-main">
-            <!-- Controls -->
-            <div class="forum-controls">
-                <div class="search-box">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" placeholder="Поиск по форуму: асаны, медитация, курсы...">
-                </div>
-                <select class="filter-select">
-                    <option>Сначала новые</option>
-                    <option>Сначала популярные</option>
-                    <option>Без ответов</option>
-                    <option>Решённые</option>
-                </select>
-            </div>
-
-            <!-- Thread List -->
-            <div class="thread-list" id="threadList">
-                <!-- Pinned Thread -->
-                <article class="thread-card pinned" onclick="showThread('welcome')">
-                    <div class="thread-header">
-                        <h3 class="thread-title">
-                            <span class="pinned-badge">📌 Закреплено</span><br>
-                            Добро пожаловать в сообщество 🙏 Правила и начало пути
-                        </h3>
-                    </div>
-                    <div class="thread-tags">
-                        <span class="thread-tag">📋 Важно</span>
-                        <span class="thread-tag">🆕 Новичкам</span>
-                    </div>
-                    <p class="thread-preview">Приветствуем вас в нашем йога-пространстве! Здесь вы найдёте поддержку, знания и единомышленников. Пожалуйста, ознакомьтесь с правилами...</p>
-                    <div class="thread-footer">
-                        <div class="thread-author">
-                            <div class="author-avatar">А</div>
-                            <span class="author-name">Анна, преподаватель</span>
-                        </div>
-                        <div class="thread-stats">
-                            <span>💬 42</span>
-                            <span>👁️ 1.2k</span>
-                            <span>🕐 2 дня назад</span>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Regular Threads -->
-                <article class="thread-card" onclick="showThread('asana')">
-                    <div class="thread-header">
-                        <h3 class="thread-title">Как правильно выполнять Ширшасану (стойка на голове)?</h3>
-                    </div>
-                    <div class="thread-tags">
-                        <span class="thread-tag">🧘‍♀️ Хатха</span>
-                        <span class="thread-tag badge badge-hot">🔥 Горячее</span>
-                    </div>
-                    <p class="thread-preview">Начала практиковать стойку на голове, но чувствую напряжение в шее. Подскажите, на что обратить внимание? Делала у стены 30 секунд...</p>
-                    <div class="thread-footer">
-                        <div class="thread-author">
-                            <div class="author-avatar">М</div>
-                            <span class="author-name">Мария</span>
-                        </div>
-                        <div class="thread-stats">
-                            <span>💬 28</span>
-                            <span>👁️ 456</span>
-                            <span>🕐 5 часов назад</span>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="thread-card" onclick="showThread('course')">
-                    <div class="thread-header">
-                        <h3 class="thread-title">🎓 Запись на курс "Йога для начинающих" — сентябрь</h3>
-                    </div>
-                    <div class="thread-tags">
-                        <span class="thread-tag">🎓 Курс</span>
-                        <span class="thread-tag badge badge-new">✨ Новое</span>
-                    </div>
-                    <p class="thread-preview">Открыта запись на 8-недельный онлайн-курс для начинающих. В программе: основы асан, дыхание, теория, поддержка в чате. Старт 15 сентября...</p>
-                    <div class="thread-footer">
-                        <div class="thread-author">
-                            <div class="author-avatar">А</div>
-                            <span class="author-name">Анна, преподаватель</span>
-                        </div>
-                        <div class="thread-stats">
-                            <span>💬 15</span>
-                            <span>👁️ 320</span>
-                            <span>🕐 1 день назад</span>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="thread-card" onclick="showThread('meditation')">
-                    <div class="thread-header">
-                        <h3 class="thread-title">🕉️ Утренняя медитация: делитесь опытом и практиками</h3>
-                    </div>
-                    <div class="thread-tags">
-                        <span class="thread-tag">🕉️ Медитация</span>
-                        <span class="thread-tag">💭 Обсуждение</span>
-                    </div>
-                    <p class="thread-preview">Каждое утро начинаю с 15 минут медитации. Заметила, что после практики день проходит спокойнее. А как вы практикуете? Какие техники используете?...</p>
-                    <div class="thread-footer">
-                        <div class="thread-author">
-                            <div class="author-avatar">Е</div>
-                            <span class="author-name">Елена</span>
-                        </div>
-                        <div class="thread-stats">
-                            <span>💬 53</span>
-                            <span>👁️ 892</span>
-                            <span>🕐 3 дня назад</span>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="thread-card" onclick="showThread('ayurveda')">
-                    <div class="thread-header">
-                        <h3 class="thread-title">🌿 Аюрведические рекомендации для типа Вата в осенний период</h3>
-                    </div>
-                    <div class="thread-tags">
-                        <span class="thread-tag">🌿 Аюрведа</span>
-                        <span class="thread-tag badge badge-solved">✅ Решено</span>
-                    </div>
-                    <p class="thread-preview">Чувствую повышенную тревожность и сухость кожи с наступлением осени. Подскажите, как поддержать Вата-дошу? Интересуют питание, режим, практики...</p>
-                    <div class="thread-footer">
-                        <div class="thread-author">
-                            <div class="author-avatar">К</div>
-                            <span class="author-name">Ксения</span>
-                        </div>
-                        <div class="thread-stats">
-                            <span>💬 19</span>
-                            <span>👁️ 267</span>
-                            <span>🕐 1 неделю назад</span>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="thread-card" onclick="showThread('schedule')">
-                    <div class="thread-header">
-                        <h3 class="thread-title">📅 Обновление расписания: новые онлайн-занятия по вторникам</h3>
-                    </div>
-                    <div class="thread-tags">
-                        <span class="thread-tag">📅 Расписание</span>
-                        <span class="thread-tag">🔔 Анонс</span>
-                    </div>
-                    <p class="thread-preview">С 1 октября добавляем вечерние занятия по вторникам в 19:00 МСК — "Виньяса-флоу для расслабления". Запись открыта, первые 10 участников — скидка 20%...</p>
-                    <div class="thread-footer">
-                        <div class="thread-author">
-                            <div class="author-avatar">А</div>
-                            <span class="author-name">Анна, преподаватель</span>
-                        </div>
-                        <div class="thread-stats">
-                            <span>💬 8</span>
-                            <span>👁️ 189</span>
-                            <span>🕐 4 дня назад</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            <!-- Thread Detail View (Hidden by default) -->
-            <div class="thread-detail" id="threadDetail">
-                <div class="detail-header">
-                    <h1 class="detail-title" id="detailTitle">Заголовок темы</h1>
-                    <div class="detail-meta">
-                        <span id="detailAuthor">👤 Автор</span>
-                        <span id="detailTime">🕐 Время</span>
-                        <span id="detailViews">👁️ Просмотры</span>
-                        <span id="detailComments">💬 Комментарии</span>
-                    </div>
-                </div>
-                <div class="detail-content" id="detailContent">
-                    <!-- Content will be injected by JS -->
-                </div>
-                
-                <div class="comments-section">
-                    <h3 class="comments-title">💬 Комментарии (<span id="commentCount">0</span>)</h3>
-                    <div class="comment-list" id="commentList">
-                        <!-- Comments will be injected by JS -->
-                    </div>
-                    
-                    <div class="comment-form">
-                        <div class="comment-form-avatar">В</div>
-                        <textarea class="comment-form-input" placeholder="Напишите ваш комментарий... Практикуйте осознанность 🙏"></textarea>
-                        <button class="comment-form-btn" onclick="addComment()">Отправить</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Back to home -->
-            <div class="back-to-home">
-                <a href="index.html">
-                    ← Вернуться на главную страницу установки
+            <div class="steps-cta">
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-primary btn-large btn-full-mobile" style="margin-bottom: 12px;">
+                    👁️ Сначала посмотрите демо!
+                </a><br>
+                <a href="https://github.com/feekool/feekool.github.io" target="_blank" class="btn btn-outline btn-large btn-full-mobile">
+                    ⚡ Использовать шаблон
                 </a>
             </div>
-        </main>
+        </div>
+    </section>
+
+    <!-- Сценарии использования для йога-образования -->
+    <section class="section" aria-labelledby="usecases-title">
+        <h2 id="usecases-title" class="section-title">🧩 Одна платформа — все форматы обучения</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">🎓</div>
+                <h3>Онлайн-курсы йоги</h3>
+                <p>Структурированные программы: видео-уроки, домашние задания, сертификаты, прогресс учеников.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">👁️ Демо курсов</a>
+            </div>
+            <div class="card">
+                <div class="card-icon">🛍️</div>
+                <h3>Витрина практик</h3>
+                <p>Продажа записей занятий, программ, мерча, цифровых гайдов и медитаций.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">👁️ Демо витрины</a>
+            </div>
+            <div class="card">
+                <div class="card-icon">📅</div>
+                <h3>Расписание занятий</h3>
+                <p>Календарь онлайн- и офлайн-сессий, запись, напоминания, отмены.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">👁️ Демо расписания</a>
+            </div>
+            <div class="card">
+                <div class="card-icon">📚</div>
+                <h3>База знаний</h3>
+                <p>Асаны с описанием, философия йоги, анатомия, пранаяма — структурированная библиотека.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">👁️ Демо базы</a>
+            </div>
+            <div class="card">
+                <div class="card-icon">👥</div>
+                <h3>Сообщество учеников</h3>
+                <p>Обмен опытом, челленджи, поддержка, мотивация — без фрагментации в мессенджерах.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">👁️ Демо сообщества</a>
+            </div>
+            <div class="card">
+                <div class="card-icon">💬</div>
+                <h3>Обратная связь</h3>
+                <p>Вопросы преподавателю, разбор асан, персональные рекомендации — в одном месте.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">👁️ Демо обратной связи</a>
+            </div>
+            <div class="card">
+                <div class="card-icon">🎁</div>
+                <h3>Программа лояльности</h3>
+                <p>Баллы за активность, достижения, сертификаты, скидки на следующие курсы.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">👁️ Демо лояльности</a>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔐</div>
+                <h3>Закрытые группы</h3>
+                <p>Премиум-контент, углублённые практики, мастер-группы — доступ по подписке.</p>
+                <a href="https://feekool.github.io" target="_blank" class="btn btn-outline">👁️ Демо премиум</a>
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: clamp(24px, 5vw, 36px); background: #e8f4ec; padding: clamp(12px, 3vw, 16px); border-radius: 60px; font-size: clamp(0.9rem, 2.8vw, 1rem);">
+            🛠️ Нужна уникальная кастомизация под ваш стиль преподавания? <a href="https://github.com/feekool/feekool.github.io/issues" target="_blank">Свяжитесь с нами</a>
+        </p>
+    </section>
+
+    <!-- Галерея -->
+    <section class="section" aria-labelledby="gallery-title">
+        <h2 id="gallery-title" class="section-title">🖼️ Примеры йога-платформ</h2>
+        <div class="gallery" id="galleryContainer">
+            <div class="gallery-item" data-id="0">
+                <div class="gallery-img" style="background-image: url('https://picsum.photos/id/1015/250/160');">🧘‍♀️ Курсы</div>
+            </div>
+            <div class="gallery-item" data-id="1">
+                <div class="gallery-img" style="background-image: url('https://picsum.photos/id/1025/250/160');">📅 Расписание</div>
+            </div>
+            <div class="gallery-item" data-id="2">
+                <div class="gallery-img" style="background-image: url('https://picsum.photos/id/1035/250/160');">👥 Сообщество</div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 24px;">
+            <a href="https://feekool.github.io" target="_blank" class="btn btn-primary">🎨 Посмотреть больше в демо</a>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-block" id="contact" aria-labelledby="cta-title">
+        <div class="offer-badge">🧘 ЛУЧШЕЕ РЕШЕНИЕ ДЛЯ ЙОГА-ШКОЛ 🧘</div>
+        <h3 id="cta-title">Объедините обучение, продажи и сообщество</h3>
+        <p style="max-width: 700px; margin: 0 auto 24px; font-size: clamp(0.95rem, 3vw, 1.05rem);">
+            Telegram, Instagram, Zoom — фрагментируют опыт учеников. Создайте целостное пространство: от первого знакомства до сертификата.
+        </p>
+        
+        <div class="cta-buttons">
+            <a href="https://feekool.github.io" target="_blank" class="btn btn-primary btn-large" aria-label="Открыть демо-презентацию платформы">
+                📢 Презентация
+            </a>
+            <a href="https://feekool.github.io" target="_blank" class="btn btn-outline btn-large" aria-label="Открыть демо-платформу">
+                🚀 Демо-платформа
+            </a>
+            <a href="https://github.com/feekool/feekool.github.io/issues" target="_blank" class="btn btn-outline btn-large" aria-label="Запросить консультацию">
+                💬 Консультация
+            </a>
+        </div>
+        
+        <div class="cta-note">
+            ⚡ <strong>Бесплатная установка и настройка!</strong> Напишете нам — поможем адаптировать платформу под вашу йога-школу, стиль преподавания и бизнес-модель.
+        </div>
+    </section>
+
+    <!-- Final buttons -->
+    <div style="display: flex; justify-content: center; gap: clamp(12px, 3vw, 24px); flex-wrap: wrap; margin: clamp(16px, 4vw, 40px) 0;" role="navigation" aria-label="Основные действия">
+        <a href="https://feekool.github.io" target="_blank" class="btn btn-primary btn-large" aria-label="Перейти к демо-презентации">
+            🎯 Демо-презентация
+        </a>
+        <a href="https://feekool.github.io" target="_blank" class="btn btn-outline btn-large" aria-label="Открыть предварительную версию">
+            👁️ Предварительная версия
+        </a>
+        <a href="https://github.com/feekool/feekool.github.io" target="_blank" class="btn btn-outline btn-large" aria-label="Перейти к коду на GitHub">
+            🐙 GitHub шаблон
+        </a>
     </div>
+
+    <footer>
+        <p>© Feekool Yoga — платформа для обучения йоге на GitHub Pages. Базовая open-source версия распространяется свободно.<br>
+        Кастомизация под хатха-йогу, виньясу, кундалини, аюрведу, авторские методики — <a href="https://feekool.github.io/" target="_blank">свяжитесь с нами</a>.</p>
+        <p style="margin-top: 12px;">🧘 Никакого бэкенда, никаких серверов — только ваше преподавание и осознанное обучение.</p>
+        <p style="margin-top: 8px;">
+            <a href="https://feekool.github.io" target="_blank" style="color: #2a5a42; font-weight: 600;">👁️ Открыть демо-платформу сейчас</a>
+        </p>
+    </footer>
 </div>
 
-<script>
-    // Demo thread data
-    const threads = {
-        welcome: {
-            title: 'Добро пожаловать в сообщество 🙏 Правила и начало пути',
-            author: 'Анна, преподаватель',
-            time: '2 дня назад',
-            views: '1.2k',
-            comments: 42,
-            content: `<p>Приветствуем вас в нашем йога-пространстве! 🧘‍♀️✨</p>
-            <p>Здесь вы найдёте поддержку, знания и единомышленников на пути практики. Чтобы наше сообщество было комфортным для всех, пожалуйста, ознакомьтесь с простыми правилами:</p>
-            <ul style="margin: 16px 0 16px 24px; line-height: 1.7;">
-                <li>🙏 Уважайте опыт каждого — все мы на разных этапах пути</li>
-                <li>🔍 Проверяйте информацию перед тем, как делиться советами по здоровью</li>
-                <li>🧘‍♀️ Делитесь своим опытом, но не навязывайте его как единственно верный</li>
-                <li>💬 Задавайте вопросы — здесь нет "глупых" тем</li>
-                <li>🚫 Не размещайте рекламу без согласования с модератором</li>
-            </ul>
-            <p><strong>С чего начать?</strong></p>
-            <ol style="margin: 16px 0 16px 24px; line-height: 1.7;">
-                <li>Расскажите немного о себе в теме "Знакомство"</li>
-                <li>Подпишитесь на интересующие вас категории</li>
-                <li>Задайте первый вопрос или поделитесь инсайтом</li>
-            </ol>
-            <p>Помните: йога — это не только асаны, это путь к себе. Мы рады, что вы с нами! 🙏💚</p>
-            <p><em>С любовью и осознанностью,<br>Анна и команда сообщества</em></p>`,
-            comments: [
-                { author: 'Дмитрий', time: '1 день назад', text: 'Спасибо за тёплый приём! Практикую йогу 3 месяца, очень рад присоединиться к сообществу 🙏' },
-                { author: 'Ольга', time: '1 день назад', text: 'Правила понятны и логичны. Вопрос: можно ли создавать темы на английском для иностранных учеников?' },
-                { author: 'Анна, преподаватель', time: '20 часов назад', text: 'Ольга, да, конечно! У нас есть раздел "International" для англоязычных тем 💚' }
-            ]
-        },
-        asana: {
-            title: 'Как правильно выполнять Ширшасану (стойка на голове)?',
-            author: 'Мария',
-            time: '5 часов назад',
-            views: '456',
-            comments: 28,
-            content: `<p>Намасте, друзья! 🙏</p>
-            <p>Начала активно практиковать стойку на голове около месяца назад. Делаю у стены, держусь около 30 секунд. Но замечаю, что после практики чувствую напряжение в шее и верхней части трапеции.</p>
-            <p><strong>Что я делаю:</strong></p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li>Разминка шеи и плеч перед практикой</li>
-                <li>Вход через "дельфин" или из позы ребёнка</li>
-                <li>Локти на ширине плеч, пальцы в замок</li>
-                <li>Мах ногами, стараюсь не "падать" в позу</li>
-            </ul>
-            <p><strong>Вопросы:</strong></p>
-            <ol style="margin: 16px 0 16px 24px;">
-                <li>Нормально ли чувствовать напряжение в шее на начальном этапе?</li>
-                <li>Как понять, что вес распределяется правильно?</li>
-                <li>Стоит ли пока вернуться к подготовительным асанам?</li>
-            </ol>
-            <p>Буду благодарна за любой совет и опыт! 🙏✨</p>
-            <p><em>P.S. Практикую хатха-йогу, уровень — продолжающий</em></p>`,
-            comments: [
-                { author: 'Анна, преподаватель', time: '4 часа назад', text: 'Мария, спасибо за подробный вопрос! 💚 Напряжение в шее — сигнал, что часть веса всё ещё на голове. Попробуйте: 1) больше работать с предплечьями, 2) сократить время у стены до 15 сек, но с идеальной техникой. Могу прислать видео-разбор в ЛС.' },
-                { author: 'Игорь', time: '3 часа назад', text: 'Мне помогло упражнение "лодочка" для укрепления кора — когда мышцы живота держат, шее легче. Также проверь, не зажимаешь ли ты челюсть 😊' },
-                { author: 'Мария', time: '1 час назад', text: 'Спасибо огромное! 💚 Анна — да, пожалуйста, буду ждать видео. Игорь — про челюсть не подумала, точно зажимаю! Буду работать 🙏' }
-            ]
-        },
-        course: {
-            title: '🎓 Запись на курс "Йога для начинающих" — сентябрь',
-            author: 'Анна, преподаватель',
-            time: '1 день назад',
-            views: '320',
-            comments: 15,
-            content: `<p>Дорогие друзья! 🙏✨</p>
-            <p>Открыта запись на наш осенний поток курса <strong>"Йога для начинающих"</strong>.</p>
-            <p><strong>📅 Формат:</strong> 8 недель онлайн-занятий + поддержка в сообществе</p>
-            <p><strong>🕐 Расписание:</strong> Вторник и Четверг, 19:00 МСК (записи доступны 48 часов)</p>
-            <p><strong>🎯 В программе:</strong></p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li>✅ Основы 30 ключевых асан с разбором ошибок</li>
-                <li>✅ Пранаяма и техники дыхания для спокойствия</li>
-                <li>✅ Введение в философию йоги (без эзотерики, только практика)</li>
-                <li>✅ Домашние задания с персональной обратной связью</li>
-                <li>✅ Закрытый чат с преподавателем и участниками</li>
-            </ul>
-            <p><strong>💰 Стоимость:</strong></p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li>Полный курс: 8 900 ₽</li>
-                <li>Ранняя пташка (до 10 сентября): 7 200 ₽</li>
-                <li>Рассрочка: 3 платежа по 3 000 ₽</li>
-            </ul>
-            <p><strong>🎁 Бонусы при записи до 1 сентября:</strong></p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li>📚 PDF-гайд "10 асан для утренней практики"</li>
-                <li>🧘‍♀️ Доступ к библиотеке медитаций (3 шт.)</li>
-                <li>🎫 Скидка 15% на следующий курс</li>
-            </ul>
-            <p><a href="#" style="color: #2a5a4a; font-weight: 600;">👉 Записаться на курс</a> или задавайте вопросы в комментариях! 💬</p>`,
-            comments: [
-                { author: 'Екатерина', time: '20 часов назад', text: 'Анна, подскажите, подойдёт ли курс, если есть небольшие проблемы с коленями? 🙏' },
-                { author: 'Анна, преподаватель', time: '18 часов назад', text: 'Екатерина, да! Мы всегда предлагаем модификации асан. На первом занятии сделаем индивидуальный разбор. Можете написать мне в ЛС подробности 💚' },
-                { author: 'Алексей', time: '12 часов назад', text: 'Записался! Очень жду начала. Вопрос: будут ли занятия доступны в записи, если пропущу по работе?' },
-                { author: 'Анна, преподаватель', time: '10 часов назад', text: 'Алексей, да! Записи доступны 48 часов после эфира + конспекты в текстовом формате 🙏' }
-            ]
-        },
-        meditation: {
-            title: '🕉️ Утренняя медитация: делитесь опытом и практиками',
-            author: 'Елена',
-            time: '3 дня назад',
-            views: '892',
-            comments: 53,
-            content: `<p>Привет, сообщество! 🙏💚</p>
-            <p>Хочу начать тему про утренние практики. Уже полгода начинаю день с 15-20 минут медитации, и это полностью изменило моё качество жизни: меньше реактивности, больше ясности, спокойное начало дня.</p>
-            <p><strong>Мой ритуал:</strong></p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li>🌅 Просыпаюсь за 30 мин до будильника (да, это реально!)</li>
-                <li>🥃 Стакан тёплой воды с лимоном</li>
-                <li>🧘‍♀️ 5 минут простого наблюдения за дыханием</li>
-                <li>🕉️ 10 минут медитации с мантрой "Со-Хам"</li>
-                <li>✍️ 2-3 предложения в дневнике благодарности</li>
-            </ul>
-            <p><strong>Что заметила:</strong></p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li>✅ Легче принимать решения в течение дня</li>
-                <li>✅ Меньше "заедаю" стресс</li>
-                <li>✅ Улучшился сон (парадокс, но факт)</li>
-            </ul>
-            <p>А как вы практикуете? 🙏</p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li>Медитируете утром, вечером или в другое время?</li>
-                <li>Используете приложения, таймеры, или по ощущениям?</li>
-                <li>Какие техники пробовали: наблюдение, визуализация, мантры, сканирование тела?</li>
-                <li>С какими сложностями сталкиваетесь?</li>
-            </ul>
-            <p>Делитесь — ваш опыт может стать поддержкой для кого-то! 💫</p>`,
-            comments: [
-                { author: 'Михаил', time: '3 дня назад', text: 'Практикую випассану по 30 мин утром. Главный инсайт: не бороться с мыслями, а просто замечать их. Как только перестал "ругать" себя за отвлечения — практика пошла легче.' },
-                { author: 'София', time: '2 дня назад', text: 'Мне помогло приложение Insight Timer с таймером и колокольчиками. Но сейчас стараюсь медитировать без гаджетов, чтобы не было соблазна проверить телефон 🙈' },
-                { author: 'Анна, преподаватель', time: '2 дня назад', text: 'Отличная тема, Елена! 💚 Добавлю: если сложно сидеть — можно медитировать в движении (медленная ходьба с фокусом на стопы) или даже лёжа. Главное — регулярность, а не идеальные условия.' },
-                { author: 'Елена', time: '1 день назад', text: 'Спасибо всем за ответы! 💫 Михаил — про "не бороться" это прямо в точку. София — понимаю про телефоны, сама иногда ловлю себя 😅 Анна — спасибо за идею с ходьбой, попробую на природе!' }
-            ]
-        },
-        ayurveda: {
-            title: '🌿 Аюрведические рекомендации для типа Вата в осенний период',
-            author: 'Ксения',
-            time: '1 неделю назад',
-            views: '267',
-            comments: 19,
-            content: `<p>Намасте! 🙏</p>
-            <p>С наступлением осени заметила, что моя Вата-доша "разбушевалась": тревожность, сухость кожи, нестабильный сон, желание "заесть" беспокойство.</p>
-            <p><strong>Что уже пробую:</strong></p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li>🍲 Тёплая, маслянистая пища (супы, тушёные овощи, гхи)</li>
-                <li>🛁 Вечерние ванны с кунжутным маслом</li>
-                <li>🧘‍♀️ Спокойные, заземляющие практики (йога-нидра, медленные асаны)</li>
-                <li>🌙 Режим: стараюсь ложиться до 22:00</li>
-            </ul>
-            <p><strong>Вопросы к сообществу:</strong></p>
-            <ol style="margin: 16px 0 16px 24px;">
-                <li>Какие специи особенно полезны для Ваты осенью? (использую имбирь, корицу, кардамон)</li>
-                <li>Есть ли проверенные аюрведические травы/чаи?</li>
-                <li>Как справляетесь с "осенней хандрой" на уровне дош?</li>
-            </ol>
-            <p>Буду благодарна за ваш опыт и рекомендации! 🙏🍂</p>
-            <p><em>Важно: я консультируюсь с аюрведическим специалистом, здесь делюсь личным опытом для поддержки сообщества</em></p>`,
-            comments: [
-                { author: 'Дарья, аюрведа-практик', time: '6 дней назад', text: 'Ксения, для Ваты осенью особенно хороши: мускатный орех (щепотка в тёплое молоко перед сном), ашваганда (по согласованию со специалистом), и обязательно — тёплые масла внутрь (1 ч.л. гхи утром). 💚' },
-                { author: 'Ксения', time: '5 дней назад', text: 'Дарья, спасибо! 🙏 Про мускатный орех не знала — обязательно попробую. Ашваганду обсужу со своим консультантом.' },
-                { author: 'Ирина', time: '4 дня назад', text: 'Мне очень помогает абхьянга (самомассаж тёплым кунжутным маслом) перед душем. 10-15 минут — и тревожность заметно снижается. Плюс запах масла успокаивает 💆‍♀️' }
-            ]
-        },
-        schedule: {
-            title: '📅 Обновление расписания: новые онлайн-занятия по вторникам',
-            author: 'Анна, преподаватель',
-            time: '4 дня назад',
-            views: '189',
-            comments: 8,
-            content: `<p>Дорогие практики! 🙏✨</p>
-            <p>По вашим просьбам мы расширяем расписание онлайн-занятий!</p>
-            <p><strong>🆕 Новое занятие:</strong></p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li><strong>Вторник, 19:00 МСК</strong></li>
-                <li><strong>"Виньяса-флоу для расслабления"</strong></li>
-                <li>Длительность: 60 минут + 10 минут шавасана</li>
-                <li>Уровень: начинающие и продолжающие</li>
-            </ul>
-            <p><strong>🎯 Что будет на занятии:</strong></p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li>Плавные переходы между асанами в ритме дыхания</li>
-                <li>Акцент на раскрытие бёдер и расслабление плечевого пояса</li>
-                <li>Техники дыхания для снятия напряжения</li>
-                <li>Глубокая шавасана с йога-нидрой в конце</li>
-            </ul>
-            <p><strong>💰 Стоимость:</strong></p>
-            <ul style="margin: 16px 0 16px 24px;">
-                <li>Разовое посещение: 600 ₽</li>
-                <li>Абонемент на 4 занятия: 2 000 ₽ (экономия 400 ₽)</li>
-                <li><strong>🎁 Первые 10 записавшихся — скидка 20%!</strong></li>
-            </ul>
-            <p><strong>📝 Как записаться:</strong></p>
-            <ol style="margin: 16px 0 16px 24px;">
-                <li>Напишите "Хочу на виньясу" в комментариях или в ЛС</li>
-                <li>Получите ссылку на оплату и Zoom</li>
-                <li>За 1 час до занятия придёт напоминание</li>
-            </ol>
-            <p>Жду вас на ковриках! 🧘‍♀️💚</p>
-            <p><em>Первое занятие — 3 октября. Места ограничены!</em></p>`,
-            comments: [
-                { author: 'Наталья', time: '3 дня назад', text: 'Хочу на виньясу! 🙏 Как раз искала вечернее занятие после работы' },
-                { author: 'Анна, преподаватель', time: '3 дня назад', text: 'Наталья, отлично! 💚 Написала вам в ЛС детали записи. Добро пожаловать!' },
-                { author: 'Павел', time: '2 дня назад', text: 'А будет ли запись занятия, если не смогу присутствовать онлайн?' },
-                { author: 'Анна, преподаватель', time: '2 дня назад', text: 'Павел, да! Запись доступна 48 часов после эфира для всех записавшихся 🙏' }
-            ]
-        }
-    };
+<!-- Mobile CTA -->
+<div class="mobile-cta" role="navigation" aria-label="Быстрый доступ к демо">
+    <a href="https://feekool.github.io" target="_blank" class="btn btn-primary" aria-label="Открыть демо-платформу для йога-школы">
+        🧘 Открыть демо-платформу
+    </a>
+</div>
 
-    // Show thread detail
-    function showThread(threadId) {
-        const thread = threads[threadId];
-        if (!thread) return;
-        
-        // Update detail view
-        document.getElementById('detailTitle').textContent = thread.title;
-        document.getElementById('detailAuthor').textContent = `👤 ${thread.author}`;
-        document.getElementById('detailTime').textContent = `🕐 ${thread.time}`;
-        document.getElementById('detailViews').textContent = `👁️ ${thread.views}`;
-        document.getElementById('detailComments').textContent = `💬 ${thread.comments}`;
-        document.getElementById('detailContent').innerHTML = thread.content;
-        document.getElementById('commentCount').textContent = thread.comments;
-        
-        // Render comments
-        const commentList = document.getElementById('commentList');
-        commentList.innerHTML = thread.comments.map(c => `
-            <div class="comment-card">
-                <div class="comment-avatar">${c.author.charAt(0)}</div>
-                <div class="comment-content">
-                    <div class="comment-header">
-                        <span class="comment-author">${c.author}</span>
-                        <span class="comment-time">${c.time}</span>
-                    </div>
-                    <p class="comment-text">${c.text}</p>
-                </div>
-            </div>
-        `).join('');
-        
-        // Toggle views
-        document.getElementById('threadList').classList.add('hidden');
-        document.getElementById('threadDetail').classList.add('active');
-        
-        // Scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    
-    // Add comment (demo)
-    function addComment() {
-        const input = document.querySelector('.comment-form-input');
-        const text = input.value.trim();
-        if (!text) return;
-        
-        const commentList = document.getElementById('commentList');
-        const newComment = document.createElement('div');
-        newComment.className = 'comment-card';
-        newComment.innerHTML = `
-            <div class="comment-avatar">В</div>
-            <div class="comment-content">
-                <div class="comment-header">
-                    <span class="comment-author">Вы</span>
-                    <span class="comment-time">только что</span>
-                </div>
-                <p class="comment-text">${text}</p>
-            </div>
-        `;
-        commentList.appendChild(newComment);
-        input.value = '';
-        
-        // Update count
-        const countEl = document.getElementById('commentCount');
-        countEl.textContent = parseInt(countEl.textContent) + 1;
-        
-        // Demo feedback
-        alert('💬 Комментарий добавлен! (В реальной версии он сохранится в форуме)');
-    }
-    
-    // Category selection (demo)
-    document.querySelectorAll('.category-item').forEach(item => {
-        item.addEventListener('click', function() {
-            document.querySelectorAll('.category-item').forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
+<!-- Scripts -->
+<script>
+    (function() {
+        const galleryContainer = document.getElementById('galleryContainer');
+        if (!galleryContainer) return;
+
+        function updateGalleryImage(item, imgDiv, inputField) {
+            let newUrl = inputField.value.trim();
+            if (!newUrl) {
+                newUrl = "https://via.placeholder.com/250x160?text=Йога+платформа";
+            }
+            try {
+                new URL(newUrl);
+                imgDiv.style.backgroundImage = `url('${newUrl.replace(/'/g, "\\'")}')`;
+            } catch(e) {
+                alert('Пожалуйста, введите корректный URL изображения');
+                return;
+            }
+            imgDiv.style.backgroundSize = 'cover';
+            imgDiv.style.backgroundPosition = 'center';
+        }
+
+        const items = galleryContainer.querySelectorAll('.gallery-item');
+        items.forEach(item => {
+            const imgDiv = item.querySelector('.gallery-img');
+            const inputField = item.querySelector('input');
+            const btn = item.querySelector('.update-img');
             
-            // Demo filter feedback
-            const categoryName = this.textContent.trim();
-            if (!this.querySelector('.active') && !categoryName.includes('Все темы')) {
-                alert(`🔍 Фильтрация по категории: ${categoryName}\n\n(В реальной версии покажутся только темы этой категории)`);
+            if (btn && imgDiv && inputField) {
+                if (inputField.value) {
+                    imgDiv.style.backgroundImage = `url('${inputField.value}')`;
+                    imgDiv.style.backgroundSize = 'cover';
+                }
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    updateGalleryImage(item, imgDiv, inputField);
+                });
+                inputField.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        updateGalleryImage(item, imgDiv, inputField);
+                    }
+                });
             }
         });
-    });
-    
-    // Search demo
-    document.querySelector('.search-box input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            const query = this.value.trim();
-            if (query) {
-                alert(`🔍 Поиск: "${query}"\n\n(В реальной версии отобразятся релевантные темы)`);
-            }
+        
+        const mobileCta = document.querySelector('.mobile-cta');
+        if (mobileCta) {
+            let lastScroll = 0;
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll > 300 && currentScroll > lastScroll) {
+                    mobileCta.style.transform = 'translateY(0)';
+                    mobileCta.style.opacity = '1';
+                } else if (currentScroll < 100) {
+                    mobileCta.style.transform = 'translateY(100px)';
+                    mobileCta.style.opacity = '0';
+                }
+                lastScroll = currentScroll;
+            }, { passive: true });
         }
-    });
+    })();
 </script>
 
+<!-- SEO Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Feekool Yoga",
+  "description": "Платформа для обучения йоге на GitHub Pages: онлайн-курсы, расписание, витрина практик, сообщество учеников — без серверов и сложной настройки",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "Any",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "RUB"
+  },
+  "url": "https://feekool.github.io",
+  "keywords": "йога, онлайн-курсы, обучение йоге, йога-школа, платформа для преподавателей, расписание занятий, сообщество йоги"
+}
+</script>
 </body>
 </html>
